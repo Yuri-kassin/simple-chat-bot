@@ -1,0 +1,256 @@
+{
+  "intents": [
+    {
+      "intent": "aLugarLivro",
+      "examples": [
+        {
+          "text": "alugar um livro"
+        },
+        {
+          "text": "pegar um livro"
+        }
+      ],
+      "description": "alugar livro na biblioteca "
+    },
+    {
+      "intent": "carteira",
+      "examples": [
+        {
+          "text": "atualizar carteira de estudante"
+        },
+        {
+          "text": "carteirinha"
+        },
+        {
+          "text": "renovar a carteira de estudante"
+        }
+      ],
+      "description": "renovar a carteira de estudante"
+    },
+    {
+      "intent": "inicial",
+      "examples": [
+        {
+          "text": "oi"
+        },
+        {
+          "text": "ola, bom dia"
+        },
+        {
+          "text": "Preciso de ajuda"
+        }
+      ],
+      "description": "vai começar a interação"
+    },
+    {
+      "intent": "media",
+      "examples": [
+        {
+          "text": "calcular a media"
+        },
+        {
+          "text": "formula"
+        }
+      ],
+      "description": "aluno falar sobre a media"
+    }
+  ],
+  "entities": [
+    {
+      "entity": "Livros",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "Calculo",
+          "synonyms": [
+            " Cálculo"
+          ]
+        },
+        {
+          "type": "synonyms",
+          "value": "Computação Gráfica",
+          "synonyms": [
+            "CG",
+            "Computacao Grafica"
+          ]
+        },
+        {
+          "type": "synonyms",
+          "value": "Inteligência artifical",
+          "synonyms": [
+            "AI",
+            "IA"
+          ]
+        }
+      ],
+      "fuzzy_match": true
+    }
+  ],
+  "metadata": {
+    "api_version": {
+      "major_version": "v2",
+      "minor_version": "2018-11-08"
+    }
+  },
+  "dialog_nodes": [
+    {
+      "type": "standard",
+      "title": "Bem-vindo",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Olá. Como posso te ajudar?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "conditions": "welcome || #inicial",
+      "dialog_node": "Bem-vindo",
+      "previous_sibling": "node_9_1614815915666"
+    },
+    {
+      "type": "standard",
+      "title": "Em outros casos",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Eu não entendi. Você pode tentar reformular a frase."
+              },
+              {
+                "text": "Você pode reformular sua afirmação? Eu não estou entendendo."
+              },
+              {
+                "text": "Eu não entendi o sentido."
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "conditions": "anything_else",
+      "dialog_node": "Em outros casos",
+      "previous_sibling": "Bem-vindo",
+      "disambiguation_opt_out": true
+    },
+    {
+      "type": "event_handler",
+      "output": {
+        "text": {
+          "values": [
+            "Qual Tema do livro q vc deseja?"
+          ],
+          "selection_policy": "sequential"
+        }
+      },
+      "parent": "slot_9_1614989582300",
+      "event_name": "focus",
+      "dialog_node": "handler_6_1614989582311",
+      "previous_sibling": "handler_7_1614989582311"
+    },
+    {
+      "type": "event_handler",
+      "output": {},
+      "parent": "slot_9_1614989582300",
+      "context": {
+        "Livros": "@Livros"
+      },
+      "conditions": "@Livros",
+      "event_name": "input",
+      "dialog_node": "handler_7_1614989582311"
+    },
+    {
+      "type": "frame",
+      "title": "alugandolivro",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Obrigado pela sua Resposta, iremos reservar um livro sobre o tema escolhido para voce retirar aqui na fei."
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "conditions": "#aLugarLivro",
+      "dialog_node": "node_7_1614989464974"
+    },
+    {
+      "type": "standard",
+      "title": "media",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "A media e normalmente e calculada assim: (04*atividades)+(0.6* prova), porem vc deve consultar seu professor para saber a formula da media da sua disciplina. "
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "conditions": "#media",
+      "dialog_node": "node_9_1614815915666",
+      "previous_sibling": "node_9_1614988665897"
+    },
+    {
+      "type": "standard",
+      "title": "carteira",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Para renovar sua carteira de estudante, e necessário ir fisicamente para a biblioteca da fei."
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "conditions": "#carteira",
+      "dialog_node": "node_9_1614988665897",
+      "previous_sibling": "node_7_1614989464974"
+    },
+    {
+      "type": "slot",
+      "parent": "node_7_1614989464974",
+      "variable": "$Livros",
+      "dialog_node": "slot_9_1614989582300"
+    }
+  ],
+  "counterexamples": [],
+  "system_settings": {
+    "disambiguation": {
+      "prompt": "Você quis dizer:",
+      "enabled": true,
+      "randomize": true,
+      "max_suggestions": 5,
+      "suggestion_text_policy": "title",
+      "none_of_the_above_prompt": "Nenhuma das anteriores"
+    },
+    "system_entities": {
+      "enabled": true
+    },
+    "human_agent_assist": {
+      "prompt": "Você quis dizer:"
+    }
+  },
+  "learning_opt_out": false,
+  "name": "Aula1",
+  "language": "pt-br",
+  "description": "blibioteca-fei"
+}
